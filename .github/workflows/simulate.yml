@@ -1,15 +1,28 @@
 name: Run Simulations
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   simulate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Start Docker Compose
-        run: docker-compose up --build --exit-code-from simulator
-      - name: Upload Artifacts
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and run simulations
+        run: |
+          docker compose up --build simulator --exit-code-from simulator
+
+      - name: Upload simulation artifacts
         uses: actions/upload-artifact@v4
         with:
+          name: simulation-results
           path: output/
+          retention-days: 30
