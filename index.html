@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Islands of Coherence</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a5fb4;
+      --text: #1a1a1a;
+      --bg: #fafafa;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: white;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    h1, h2, h3 { font-family: 'EB Garamond', serif; margin: 1.5rem 0 1rem; }
+    h1 { font-size: 2.8rem; color: var(--primary); text-align: center; }
+    h2 { font-size: 1.8rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .hero { text-align: center; padding: 3rem 0; background: var(--bg); border-radius: 12px; margin-bottom: 3rem; }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 1rem 0.5rem;
+      transition: 0.2s;
+    }
+    .btn:hover { background: #0d47a1; }
+    .btn-secondary { background: var(--gray); }
+    .btn-secondary:hover { background: #444; }
+    .pdf-embed {
+      width: 100%;
+      height: 800px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin: 2rem 0;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .gallery img, .gallery video {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--gray);
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      margin-top: 4rem;
+    }
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      .pdf-embed { height: 600px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <h1>Islands of Coherence</h1>
+      <p><strong>Entropy, Meaning, and the RSVP Framework</strong><br>
+      A field-theoretic approach to integrity in disintegrating times.</p>
+      <div>
+        <a href="#pdf" class="btn">Read the Monograph</a>
+        <a href="#simulations" class="btn btn-secondary">View Simulations</a>
+      </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <section id="pdf">
+      <h2>The Monograph</h2>
+      <p>Compiled on <strong>Halloween 2025</strong> — 90 pages of formal theory, simulations, and ethical design.</p>
+      <iframe src="islands_of_coherence.pdf" class="pdf-embed" title="Islands of Coherence PDF"></iframe>
+      <p style="text-align: center;">
+        <a href="islands_of_coherence.pdf" class="btn" download>Download PDF</a>
+      </p>
+    </section>
+
+    <!-- Simulations -->
+    <section id="simulations">
+      <h2>Simulation Gallery</h2>
+      <p>Visual outputs from the RSVP engine — coherence attractors, monopoles, and CLIO–HYDRA dynamics.</p>
+      <div class="gallery">
+        <div>
+          <img src="lyapunov_convergence.png" alt="Lyapunov Convergence">
+          <p><strong>Coherence Attractor</strong><br>Decay of Lyapunov functional over 1000 steps.</p>
+        </div>
+        <div>
+          <img src="monopole_nucleation.png" alt="Monopole Profile">
+          <p><strong>Semantic Monopole</strong><br>Radial Higgs and gauge field profiles.</p>
+        </div>
+        <div>
+          <img src="clio_hydra_demo.gif" alt="CLIO-HYDRA Animation">
+          <p><strong>CLIO–HYDRA Agents</strong><br>Three agents converge to shared meaning.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 Flyxion • <a href="https://github.com/flyxion/islands-of-coherence">GitHub Repository</a> • Built with LaTeX, Python, and Docker</p>
+    </footer>
+  </div>
+</body>
+</html>
