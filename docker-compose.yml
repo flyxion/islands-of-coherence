@@ -28,7 +28,7 @@ services:
       bash -c "jupyter lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token=''"
 
   # 3. Batch Simulator
-  simulator:
+    simulator:
     build:
       context: .
       dockerfile: Dockerfile.simulator
