@@ -1,8 +1,18 @@
 FROM python:3.12-slim
 
+# Install only essential packages
 RUN pip install --no-cache-dir \
-    numpy scipy matplotlib sympy pillow tqdm jupyterlab
+    numpy==1.26.4 \
+    scipy==1.13.0 \
+    matplotlib==3.8.4 \
+    sympy==1.12 \
+    pillow==10.3.0 \
+    tqdm==4.66.2
 
+# Set working directory
 WORKDIR /app
-COPY src/python/requirements.txt .  # Optional, for clarity
+
+# Copy requirements (optional, for clarity)
+COPY src/python/requirements.txt .
+
 CMD ["python", "run_all_simulations.py"]
