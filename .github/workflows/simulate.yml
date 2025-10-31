@@ -1,5 +1,5 @@
 # .github/workflows/simulate.yml
-name: Run Simulations
+name: Run Simulations & Compile PDF
 
 on:
   push:
@@ -8,26 +8,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  simulate:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read          # default – enough for checkout & upload
+      contents: read
     steps:
-      # ------------------------------------------------------------------
-      # 1. Checkout code
-      # ------------------------------------------------------------------
+      # --------------------------------------------------------------
+      # 1. Checkout
+      # --------------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ------------------------------------------------------------------
-      # 2. Set up Docker Buildx (required for docker compose v2)
-      # ------------------------------------------------------------------
+      # --------------------------------------------------------------
+      # 2. Set up Docker Buildx (needed for `docker compose`)
+      # --------------------------------------------------------------
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # ------------------------------------------------------------------
-      # 3. Free some disk space (optional but helps on large builds)
-      # ------------------------------------------------------------------
+      # --------------------------------------------------------------
+      # 3. Free a little disk (helps on large builds)
+      # --------------------------------------------------------------
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -35,15 +35,33 @@ jobs:
           sudo rm -rf "/usr/local/share/boost"
           echo "Freed disk space"
 
-      # ------------------------------------------------------------------
-      # 4. Run the simulator (Docker Compose)
-      # ------------------------------------------------------------------
-      - name: Build & run simulator
-        run: docker compose up --build simulator --exit-code-from simulator
+      # --------------------------------------------------------------
+      # 4. Compile LaTeX → main.pdf
+      # --------------------------------------------------------------
+      - name: Compile LaTeX document
+        run: |
+          docker compose up --build latex --exit-code-from latex
+          # The container writes the PDF to ./output/main.pdf
+          ls -l output/
 
-      # ------------------------------------------------------------------
-      # 5. Upload artifacts – one per logical group
-      # ------------------------------------------------------------------
+      # --------------------------------------------------------------
+      # 5. Rename PDF to the canonical name
+      # --------------------------------------------------------------
+      - name: Rename PDF
+        run: |
+          mv output/main.pdf output/islands_of_coherence.pdf
+          echo "Renamed to islands_of_coherence.pdf"
+
+      # --------------------------------------------------------------
+      # 6. Run the Python simulations
+      # --------------------------------------------------------------
+      - name: Run simulator
+        run: |
+          docker compose up --build simulator --exit-code-from simulator
+
+      # --------------------------------------------------------------
+      # 7. Upload three separate artifacts
+      # --------------------------------------------------------------
       - name: Upload Monograph PDF
         uses: actions/upload-artifact@v4
         with:
@@ -58,11 +76,11 @@ jobs:
           name: simulation-figures
           path: output/figures/
           retention-days: 30
-          if-no-files-found: warn   # still succeed if no figures yet
+          if-no-files-found: warn   # OK if no figures yet
 
       - name: Upload Simulation Logs (optional)
         uses: actions/upload-artifact@v4
-        if: always()                # upload even on failure for debugging
+        if: always()
         with:
           name: simulation-logs
           path: output/*.log
