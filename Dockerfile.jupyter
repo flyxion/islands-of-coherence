@@ -1,7 +1,17 @@
-FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
+FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y python3-pip git && rm -rf /var/lib/apt/lists/*
-RUN pip3 install --no-cache-dir jupyterlab torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# Install system deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install Python packages
+RUN pip install --no-cache-dir \
+    jupyterlab \
+    numpy matplotlib scipy sympy pillow tqdm
+
+# Setup
 WORKDIR /home/jovyan
 USER nobody
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser", "--NotebookApp.token=''"]
