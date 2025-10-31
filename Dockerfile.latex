@@ -1,6 +1,6 @@
 FROM texlive/texlive:latest
 
-# Install make, biber, and EB Garamond
+# Install make, biber, and font tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         make \
@@ -10,11 +10,13 @@ RUN apt-get update && \
         fontconfig && \
     rm -rf /var/lib/apt/lists/*
 
-# Download and install EB Garamond from Google Fonts
-RUN wget -O /tmp/ebgaramond.zip https://github.com/googlefonts/eb-garamond/releases/download/v1.004/EBGaramond.zip && \
-    unzip /tmp/ebgaramond.zip -d /usr/local/share/fonts/ebgaramond && \
+# Download EB Garamond from Google Fonts
+RUN wget -O /tmp/EBGaramond.zip https://github.com/google/fonts/raw/main/ofl/ebgaramond/EBGaramond-Regular.ttf && \
+    mkdir -p /usr/local/share/fonts/ebgaramond && \
+    unzip /tmp/EBGaramond.zip -d /usr/local/share/fonts/ebgaramond || \
+    cp /tmp/EBGaramond.zip /usr/local/share/fonts/ebgaramond/ && \
     fc-cache -fv && \
-    rm /tmp/ebgaramond.zip
+    rm -f /tmp/EBGaramond.zip
 
 WORKDIR /app
 CMD ["make"]
