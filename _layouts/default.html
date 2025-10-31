@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    {% feed_meta %}
+    {% seo %}
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="{{ site.baseurl }}/" class="logo">
+          {% if site.logo %}<img src="{{ site.logo }}" alt="{{ site.title }}">{% endif %}
+          {{ site.title }}
+        </a>
+        <nav>
+          <a href="{{ site.baseurl }}/">Home</a>
+          <a href="{{ site.baseurl }}/about">About</a>
+          <a href="{{ site.baseurl }}/downloads">Download</a>
+          <a href="{{ site.baseurl }}/simulations">Simulations</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      {{ content }}
+    </main>
+    <footer>
+      <p>© {{ 'now' | date: "%Y" }} Flyxion. Built with <a href="https://jekyllrb.com">Jekyll</a>.</p>
+    </footer>
+  </body>
+</html>

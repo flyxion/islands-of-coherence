@@ -1,0 +1,16 @@
+title: Islands of Coherence
+description: A field-theoretic framework for integrity in disintegrating times.
+theme: minima
+logo: /assets/img/logo.svg
+url: "https://flyxion.github.io"
+baseurl: "/islands-of-coherence"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
