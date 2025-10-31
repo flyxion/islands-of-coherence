@@ -7,16 +7,13 @@ services:
       context: .
       dockerfile: Dockerfile.latex
     volumes:
-      - ./output:/output
+      - output:/output
       - ./src/latex:/app
     working_dir: /app
     command: make
-    deploy:
-      resources:
-        limits:
-          memory: 2G
+    # Removed `deploy` (not supported in standard Compose)
 
-  # 2. JupyterLab (Interactive Notebooks)
+  # 2. JupyterLab (Interactive)
   jupyter:
     build:
       context: .
@@ -25,53 +22,39 @@ services:
       - "8888:8888"
     volumes:
       - ./src/python:/home/jovyan/work
-      - ./output:/home/jovyan/output
+      - output:/home/jovyan/output
     environment:
-      - JUPYTER_ENABLE_LAB=yes
-      - GRANT_SUDO=yes
+      JUPYTER_ENABLE_LAB: "yes"
     user: root
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
     command: >
       bash -c "jupyter lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token=''"
+    # Removed `deploy` + GPU (only works with Docker Swarm or special runners)
 
-  # 3. Batch Simulator (Headless)
+  # 3. Batch Simulator
   simulator:
     build:
       context: .
       dockerfile: Dockerfile.simulator
     volumes:
-      - ./output:/output
+      - output:/output
       - ./src/python:/app
     working_dir: /app
     command: python run_all_simulations.py
-    deploy:
-      resources:
-        limits:
-          memory: 6G
+    # Removed `deploy`
 
-  # 4. Web Server (Serve Results)
+  # 4. Web Server
   nginx:
     image: nginx:alpine
     ports:
       - "80:80"
     volumes:
-      - ./output:/usr/share/nginx/html:ro
+      - output:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - latex
       - simulator
-    deploy:
-      resources:
-        limits:
-          memory: 256M
+    # Removed `deploy`
 
+# Shared volume
 volumes:
   output:
