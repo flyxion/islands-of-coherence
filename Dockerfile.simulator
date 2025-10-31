@@ -1,18 +1,15 @@
 FROM python:3.12-slim
 
-# Install only essential packages
+# Install minimal dependencies
 RUN pip install --no-cache-dir \
-    numpy==1.26.4 \
-    scipy==1.13.0 \
-    matplotlib==3.8.4 \
-    sympy==1.12 \
-    pillow==10.3.0 \
-    tqdm==4.66.2
+    numpy scipy matplotlib sympy pillow tqdm
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements (optional, for clarity)
+# Copy ALL simulation files
 COPY src/python/requirements.txt .
+COPY src/python/run_all_simulations.py .
+COPY src/python/simulations/ ./simulations/
 
 CMD ["python", "run_all_simulations.py"]
