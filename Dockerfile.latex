@@ -1,27 +1,7 @@
-# Use minimal TeX Live
-FROM ubuntu:22.04
+FROM texlive/texlive:latest
 
-# Install only essential TeX packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        texlive-latex-base \
-        texlive-latex-extra \
-        texlive-fonts-recommended \
-        texlive-fonts-extra \
-        texlive-bibtex-extra \
-        biber \
-        make \
-        wget \
-        unzip \
-        fontconfig && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install EB Garamond (if not in texlive-fonts-extra)
-RUN wget -O /tmp/ebgaramond.zip https://github.com/google/fonts/raw/main/ofl/ebgaramond/EBGaramond[wght].ttf && \
-    mkdir -p /usr/local/share/fonts/ebgaramond && \
-    unzip /tmp/ebgaramond.zip -d /usr/local/share/fonts/ebgaramond && \
-    fc-cache -fv && \
-    rm /tmp/ebgaramond.zip || true
+# Install full TeX Live (includes luaotfload, fonts, etc.)
+RUN tlmgr install scheme-full
 
 WORKDIR /app
 CMD ["make"]
