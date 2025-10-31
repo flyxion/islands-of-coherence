@@ -1,3 +1,15 @@
-docker-compose up -d
-# Jupyter: http://localhost:8888
-# Site: http://localhost
+services:
+  latex:
+    build:
+      context: .
+      dockerfile: Dockerfile.latex
+    volumes:
+      - ./output:/output
+    command: make
+
+  simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile.simulator
+    volumes:
+      - ./output:/output
