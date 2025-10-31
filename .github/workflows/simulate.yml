@@ -10,79 +10,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      # --------------------------------------------------------------
-      # 1. Checkout
-      # --------------------------------------------------------------
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
 
-      # --------------------------------------------------------------
-      # 2. Set up Docker Buildx (needed for `docker compose`)
-      # --------------------------------------------------------------
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # --------------------------------------------------------------
-      # 3. Free a little disk (helps on large builds)
-      # --------------------------------------------------------------
-      - name: Free disk space
+      # Run LaTeX
+      - name: Compile LaTeX
         run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          echo "Freed disk space"
+          docker compose up latex
+          ls -l output/  # ← Now shows PDF
 
-      # --------------------------------------------------------------
-      # 4. Compile LaTeX → main.pdf
-      # --------------------------------------------------------------
-      - name: Compile LaTeX document
-        run: |
-          docker compose up --build latex --exit-code-from latex
-          # The container writes the PDF to ./output/main.pdf
-          ls -l output/
-
-      # --------------------------------------------------------------
-      # 5. Rename PDF to the canonical name
-      # --------------------------------------------------------------
-      - name: Rename PDF
-        run: |
-          mv output/main.pdf output/islands_of_coherence.pdf
-          echo "Renamed to islands_of_coherence.pdf"
-
-      # --------------------------------------------------------------
-      # 6. Run the Python simulations
-      # --------------------------------------------------------------
+      # Run simulator
       - name: Run simulator
-        run: |
-          docker compose up --build simulator --exit-code-from simulator
+        run: docker compose up simulator
 
-      # --------------------------------------------------------------
-      # 7. Upload three separate artifacts
-      # --------------------------------------------------------------
-      - name: Upload Monograph PDF
+      # Upload artifacts
+      - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
           name: monograph-pdf
           path: output/islands_of_coherence.pdf
-          retention-days: 30
-          if-no-files-found: error
 
-      - name: Upload Simulation Figures
+      - name: Upload Figures
         uses: actions/upload-artifact@v4
         with:
           name: simulation-figures
           path: output/figures/
-          retention-days: 30
-          if-no-files-found: warn   # OK if no figures yet
-
-      - name: Upload Simulation Logs (optional)
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: simulation-logs
-          path: output/*.log
-          retention-days: 7
-          if-no-files-found: ignore
