@@ -1,0 +1,13 @@
+/* Minimal, clean style */
+body { font-family: 'EB Garamond', serif; line-height: 1.7; color: #333; margin: 0; }
+.container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+header { background: #1a1a1a; color: white; padding: 1rem 0; }
+header a { color: white; text-decoration: none; }
+nav a { margin: 0 1rem; font-weight: bold; }
+.logo { font-size: 1.5rem; font-weight: bold; }
+.hero { text-align: center; padding: 4rem 0; background: #f8f8f8; }
+.btn { display: inline-block; padding: 0.8rem 1.5rem; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; margin: 1rem; }
+.btn.secondary { background: #666; }
+.gallery img { width: 48%; margin: 1%; border: 1px solid #ddd; }
+.video-wrapper { text-align: center; margin: 2rem 0; }
+footer { text-align: center; padding: 2rem; background: #eee; font-size: 0.9rem; }
