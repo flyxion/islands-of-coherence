@@ -1,11 +1,7 @@
 FROM texlive/texlive:latest
 
-# Install make, biber, and EB Garamond from TeX Live
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        make \
-        biber \
-        texlive-fonts-extra && \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    make biber texlive-fonts-extra && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
