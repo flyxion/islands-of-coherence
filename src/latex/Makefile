@@ -1,5 +1,4 @@
 TEX = main
-BIB = islands_of_coherence_refs
 
 all: pdf
 
