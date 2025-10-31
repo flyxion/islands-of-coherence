@@ -1,4 +1,4 @@
-name: Build GitHub Pages
+name: Build & Publish
 
 on:
   push:
@@ -11,12 +11,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker Artifacts
-        run: |
-          docker-compose up --build latex simulator
-          cp -r output/* docs/output/
+      # --- Install Docker Compose v2 ---
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
-      - name: Deploy to GitHub Pages
+      # --- Build & Run ---
+      - name: Build PDF & Simulations
+        run: |
+          docker compose up --build latex simulator
+
+      # --- Copy outputs ---
+      - name: Prepare site
+        run: |
+          mkdir -p docs/output
+          cp -r output/* docs/output/ || true
+          cp src/python/notebooks/*.pdf docs/output/ 2>/dev/null || true
+
+      # --- Deploy to GitHub Pages ---
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
