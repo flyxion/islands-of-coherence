@@ -1,14 +1,19 @@
 FROM python:3.12-slim
 
+# Install dependencies
 RUN pip install --no-cache-dir \
     numpy scipy matplotlib sympy pillow tqdm
 
+# Set working directory
 WORKDIR /app
 
-# Copy ALL files
+# Copy all files
 COPY src/python/requirements.txt .
 COPY src/python/run_all_simulations.py .
 COPY src/python/rsvp_core/ ./rsvp_core/
 COPY src/python/simulations/ ./simulations/
+
+# Add /app to PYTHONPATH
+ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 CMD ["python", "run_all_simulations.py"]
