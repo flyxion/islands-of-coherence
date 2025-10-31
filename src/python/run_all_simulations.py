@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
+import sys
 import os
-import subprocess
+
+# Add /app to Python path
+sys.path.insert(0, '/app')
 
 print("Running Islands of Coherence simulations...")
 
@@ -11,10 +14,10 @@ scripts = [
 ]
 
 for script in scripts:
-    print(f"Running {script}...")
-    result = subprocess.run(['python', f'simulations/{script}'], cwd='/app')
-    if result.returncode != 0:
+    print(f"Running simulations/{script}...")
+    result = os.system(f'python simulations/{script}')
+    if result != 0:
         print(f"{script} failed!")
-        exit(1)
+        sys.exit(1)
 
 print("All simulations complete!")
