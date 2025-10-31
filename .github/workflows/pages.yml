@@ -1,4 +1,4 @@
-name: Build & Publish
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -6,29 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for gh-pages push
     steps:
       - uses: actions/checkout@v4
 
-      # --- Install Docker Compose v2 ---
+      # Your simulation steps (from earlier)
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
 
-      # --- Build & Run ---
-      - name: Build PDF & Simulations
-        run: |
-          docker compose up --build latex simulator
+      - name: Run simulations
+        run: docker compose up --build simulator --exit-code-from simulator
 
-      # --- Copy outputs ---
-      - name: Prepare site
+      - name: Prepare docs
         run: |
           mkdir -p docs/output
           cp -r output/* docs/output/ || true
-          cp src/python/notebooks/*.pdf docs/output/ 2>/dev/null || true
 
-      # --- Deploy to GitHub Pages ---
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
